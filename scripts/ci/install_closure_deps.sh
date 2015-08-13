@@ -9,3 +9,4 @@ ant jar
 cd ../closure-linter
 python ./setup.py install --user
 cd ../closure-library
+npm install
