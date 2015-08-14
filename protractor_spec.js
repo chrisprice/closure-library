@@ -3,14 +3,20 @@ var PROTRACTOR_TIMEOUT = process.env.PROTRACTOR_TIMEOUT ?
                              parseInt(process.env.PROTRACTOR_TIMEOUT, 10) :
                              10 * 60 * 1000;
 
-var _allTests = require('./alltests');
+var allTests = require('./alltests');
 
 describe('all_closure_tests', function() {
+
+  beforeEach(function() {
+    // Ignores synchronization with angular loading. Since we don't use angular,
+    // enable it.
+    browser.ignoreSynchronization = true;
+  });
 
   function waitForCompletion() {
     var waitForTest = function(resolve, reject) {
       // executeScript runs the passed method in the "window" context of
-      // the current test. JSUnit exposes hooks into the tests status through
+      // the current test. JSUnit exposes hooks into the test's status through
       // the "G_testRunner" global object.
       browser.executeScript(function() {
                if (window['G_testRunner']['isFinished']()) {
@@ -40,12 +46,6 @@ describe('all_closure_tests', function() {
     });
   };
 
-  beforeEach(function() {
-    // Ignores synchronization with angular loading. Since we don't use angular,
-    // enable it.
-    browser.ignoreSynchronization = true;
-  });
-
   it('should successfully run all tests', function(done) {
     var failedTests = 0;
     var runNextTest = function(testPath) {
@@ -55,25 +55,29 @@ describe('all_closure_tests', function() {
           .then(function(status) {
             // TODO: aggregate stats here.
             console.log(status.report);
+
             if (!status.isSuccess) {
               failedTests++;
             }
+
             return status;
           });
     };
 
-    var chainTest = function(promise, test) {
+    // Chains the next test to the completion of the previous's through its
+    // promise.
+    var chainNextTest = function(promise, test) {
       promise.then(function() {
         runNextTest(test);
       });
     };
 
     var testPromise = null;
-    for (var i = 1; i < _allTests.length; i++) {
+    for (var i = 1; i < allTests.length; i++) {
       if (testPromise != null) {
-        chainTest(testPromise, _allTests[i]);
+        chainNextTest(testPromise, allTests[i]);
       } else {
-        testPromise = runNextTest(_allTests[i]);
+        testPromise = runNextTest(allTests[i]);
       }
     }
 
