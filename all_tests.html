@@ -89,6 +89,7 @@ a:hover {
   var testRunner = new goog.testing.MultiTestRunner()
       .setName(document.title)
       .setBasePath('./')
+      .setTimeout(80 * 1000)
       .setPoolSize(parallelInput.checked ? 8 : 1)
       .setStatsBucketSizes(5, 500)
       .setHidePasses(hidePassesInput.checked)

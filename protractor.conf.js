@@ -7,7 +7,7 @@ exports.config = {
 
   // Capabilities to be passed to the webdriver instance.
   capabilities: {
-    'browserName': 'firefox'
+    'browserName': 'chrome'
   },
 
   framework: 'jasmine2',
@@ -20,8 +20,8 @@ exports.config = {
   },
 
   beforeLaunch: function () {
-    httpServer.createServer({
-      showDir: false
-    }).listen('8080', 'localhost');
+    //httpServer.createServer({
+      //showDir: false
+    //}).listen('8080', 'localhost');
   }
 };
