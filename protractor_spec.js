@@ -8,7 +8,9 @@ describe('all_closure_tests', function() {
     browser.ignoreSynchronization = true;
   });
 
-  function waitForCompletion() {
+  // Polls currently loaded test page for test completion. Returns Promise that
+  // will resolve when test is finished.
+  var waitForTestSuiteCompletion = function() {
     var waitForTest = function(resolve, reject) {
       // executeScript runs the passed method in the "window" context of
       // the current test. JSUnit exposes hooks into the test's status through
@@ -43,15 +45,16 @@ describe('all_closure_tests', function() {
 
   it('should successfully run all tests', function(done) {
     var failedTests = 0;
+
+    // Navigates to testPath to invoke tests. Upon completion inspects returned
+    // test status and keeps track of the total number failed tests.
     var runNextTest = function(testPath) {
       return browser.navigate()
           .to('http://localhost:8080/' + testPath)
-          .then(function() { return waitForCompletion(); })
+          .then(waitForTestSuiteCompletion())
           .then(function(status) {
-            // TODO: aggregate stats here.
-            console.log(status.report);
-
             if (!status.isSuccess) {
+              console.log(status.report);
               failedTests++;
             }
 
@@ -77,7 +80,7 @@ describe('all_closure_tests', function() {
     }
 
     testPromise.then(function() {
-      console.log("Failed tests: " + failedTests);
+      expect(failedTests).toBe(0);
       done();
     });
   });

@@ -7,6 +7,8 @@ import sys
 
 PORT = 8080
 
+# Simple server to respond to both POST and GET requests. POST requests will
+# just respond as normal GETs.
 class ServerHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
 
     def do_GET(self):
