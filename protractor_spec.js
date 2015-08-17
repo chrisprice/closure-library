@@ -45,8 +45,8 @@ describe('all_closure_tests', function() {
                     resolve(status);
                   } else {
                     // Check every 100ms for completion.
-                    currentPollId = setTimeout(
-                        waitForTest.bind(undefined, resolve, reject), 100);
+                    setTimeout(waitForTest.bind(undefined, resolve, reject),
+                               100);
                   }
                 }
               },
