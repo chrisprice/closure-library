@@ -16,9 +16,3 @@ cd ../closure-library
 npm install
 # Install standalone selenium.
 ./node_modules/.bin/webdriver-manager update
-# Install modern node.
-nvm install 0.12.7
-
-
-echo "CURRENT NODE VERSION"
-node -v
