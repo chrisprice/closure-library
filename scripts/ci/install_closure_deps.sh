@@ -5,14 +5,12 @@
 
 set -e
 
-# Prepare nvm.
-source ~/.nvm/nvm.sh
-
-set -x
-
 # Install/use node version that has Promises.
+source ~/.nvm/nvm.sh
 nvm install 0.12
 nvm use 0.12
+
+set -x
 
 # Install closure compiler and linter.
 cd ..
