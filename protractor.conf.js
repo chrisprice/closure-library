@@ -9,7 +9,13 @@ exports.config = {
 
   // Options specific to which browser tests are run on.
   capabilities: {
-    'browserName': 'firefox'
+    'browserName': 'firefox',
+
+    'loggingPrefs': {
+      'driver': 'WARNING',
+      'server': 'WARNING',
+      'browser': 'WARNING'
+    }
   },
 
   // Testing framework used for spec file.

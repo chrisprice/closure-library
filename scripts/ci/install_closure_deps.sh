@@ -1,5 +1,8 @@
 #!/bin/bash
 
+echo "PRE INSTALL NODE VERSION"
+node -v
+
 # Install closure compiler and linter.
 cd ..
 git clone https://github.com/google/closure-compiler.git
@@ -13,3 +16,9 @@ cd ../closure-library
 npm install
 # Install standalone selenium.
 ./node_modules/.bin/webdriver-manager update
+# Install modern node.
+nvm install 0.12.7
+
+
+echo "CURRENT NODE VERSION"
+node -v
