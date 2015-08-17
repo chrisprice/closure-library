@@ -1,14 +1,18 @@
 #!/bin/bash
+#
+# Script to install all necessary dependencies for running Closure tests,
+# linting, and compiling.
 
-set -ex
+set -e
 
-node -v
-
+# Prepare nvm.
 source ~/.nvm/nvm.sh
+
+set -x
+
+# Install/use node version that has Promises.
 nvm install 0.12
 nvm use 0.12
-
-nvm alias default 0.12
 
 # Install closure compiler and linter.
 cd ..
@@ -19,9 +23,9 @@ ant jar
 cd ../closure-linter
 python ./setup.py install --user
 cd ../closure-library
+
 # Installs node "devDependencies" found in package.json.
 npm install
+
 # Install standalone selenium.
 ./node_modules/.bin/webdriver-manager update
-
-node -v
