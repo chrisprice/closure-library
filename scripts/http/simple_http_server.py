@@ -1,8 +1,7 @@
 import SimpleHTTPServer
 import SocketServer
-import logging
 import cgi
-
+import logging
 import sys
 
 PORT = 8080

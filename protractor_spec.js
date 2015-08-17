@@ -11,6 +11,8 @@ describe('all_closure_tests', function() {
   // Timeout for individual test package to complete.
   var TEST_TIMEOUT = 45 * 1000;
 
+  var TEST_SERVER = 'http://localhost:8080';
+
   // Polls currently loaded test page for test completion. Returns Promise that
   // will resolve when test is finished.
   var waitForTestSuiteCompletion = function(testPath) {
@@ -65,7 +67,7 @@ describe('all_closure_tests', function() {
     // test status and keeps track of the total number failed tests.
     var runNextTest = function(testPath) {
       return browser.navigate()
-          .to('http://localhost:8080/' + testPath)
+          .to(TEST_SERVER + '/' + testPath)
           .then(function() { return waitForTestSuiteCompletion(testPath); })
           .then(function(status) {
             if (!status.isSuccess) {
