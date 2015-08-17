@@ -3,14 +3,7 @@
 # Script to install all necessary dependencies for running Closure tests,
 # linting, and compiling.
 
-set -e
-
-# Install/use node version that has Promises.
-source ~/.nvm/nvm.sh
-nvm install 0.12
-nvm use 0.12
-
-set -x
+set -ex
 
 # Install closure compiler and linter.
 cd ..

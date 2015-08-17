@@ -1,3 +1,6 @@
+// TODO(joeltine): Remove promise module when stable node version supports it
+// natively.
+var Promise = require('promise');
 var allTests = require('./alltests');
 
 describe('all_closure_tests', function() {
