@@ -8,9 +8,14 @@ describe('all_closure_tests', function() {
     browser.ignoreSynchronization = true;
   });
 
+  // Timeout for individual test package to complete.
+  var TEST_TIMEOUT = 45 * 1000;
+
   // Polls currently loaded test page for test completion. Returns Promise that
   // will resolve when test is finished.
-  var waitForTestSuiteCompletion = function() {
+  var waitForTestSuiteCompletion = function(testPath) {
+    var testStartTime = +new Date();
+
     var waitForTest = function(resolve, reject) {
       // executeScript runs the passed method in the "window" context of
       // the current test. JSUnit exposes hooks into the test's status through
@@ -31,8 +36,18 @@ describe('all_closure_tests', function() {
                 if (status.isFinished) {
                   resolve(status);
                 } else {
-                  // Check every 100ms for completion.
-                  setTimeout(waitForTest.bind(undefined, resolve, reject), 100);
+                  var currTime = +new Date();
+                  if (currTime - testStartTime > TEST_TIMEOUT) {
+                    status.isSuccess = false;
+                    status.report = testPath + ' timed out after ' +
+                                    (TEST_TIMEOUT / 1000) + 's!';
+                    // resolve so tests continue running.
+                    resolve(status);
+                  } else {
+                    // Check every 100ms for completion.
+                    currentPollId = setTimeout(
+                        waitForTest.bind(undefined, resolve, reject), 100);
+                  }
                 }
               },
               function(err) { reject(err); });
@@ -51,7 +66,7 @@ describe('all_closure_tests', function() {
     var runNextTest = function(testPath) {
       return browser.navigate()
           .to('http://localhost:8080/' + testPath)
-          .then(waitForTestSuiteCompletion())
+          .then(function() { return waitForTestSuiteCompletion(testPath); })
           .then(function(status) {
             if (!status.isSuccess) {
               console.log(status.report);
@@ -65,9 +80,7 @@ describe('all_closure_tests', function() {
     // Chains the next test to the completion of the previous's through its
     // promise.
     var chainNextTest = function(promise, test) {
-      promise.then(function() {
-        runNextTest(test);
-      });
+      promise.then(function() { runNextTest(test); });
     };
 
     var testPromise = null;
