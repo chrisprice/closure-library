@@ -12,13 +12,11 @@ before_install:
   # emulate a GUI environment
   - "export DISPLAY=:99.0"
   - "sh -e /etc/init.d/xvfb start"
-  # 10 minutes
-  - "export PROTRACTOR_TIMEOUT=600000"
 
 install:
   - ./scripts/ci/install_closure_deps.sh
 
 script:
   - java -jar ../closure-compiler/build/compiler.jar -O ADVANCED --warning_level VERBOSE --js='**.js' --js='!**_test.js' --js='!**_perf.js' --js='!**tester.js' --js='!**promise/testsuiteadapter.js' --js='!**osapi/osapi.js' --js='!**svgpan/svgpan.js' --jscomp_off=deprecated   --js_output_file=$(mktemp)
-  - ./node_modules/.bin/webdriver-manager start & sleep 5; ./node_modules/.bin/protractor protractor.conf.js
+  - ./scripts/ci/run_all_tests.sh
   - ./scripts/ci/lint_pull_request.sh

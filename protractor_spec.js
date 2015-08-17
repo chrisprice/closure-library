@@ -1,8 +1,3 @@
-var EC = protractor.ExpectedConditions;
-var PROTRACTOR_TIMEOUT = process.env.PROTRACTOR_TIMEOUT ?
-                             parseInt(process.env.PROTRACTOR_TIMEOUT, 10) :
-                             10 * 60 * 1000;
-
 var allTests = require('./alltests');
 
 describe('all_closure_tests', function() {
