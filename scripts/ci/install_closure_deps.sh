@@ -1,10 +1,14 @@
 #!/bin/bash
 
-echo "PRE INSTALL NODE VERSION"
+set -ex
+
 node -v
 
 source ~/.nvm/nvm.sh
+nvm install 0.12
 nvm use 0.12
+
+nvm alias default 0.12
 
 # Install closure compiler and linter.
 cd ..
@@ -20,5 +24,4 @@ npm install
 # Install standalone selenium.
 ./node_modules/.bin/webdriver-manager update
 
-echo "POST INSTALL NODE VERSION"
 node -v
